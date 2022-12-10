@@ -5,7 +5,7 @@ const staffSchema = new Schema({
     name:  {type: String, require: true, trim: true },
     salary: {type: Number, },
     created: {type: Date, default: Date.now },
-  }, { collection: "staffs"});
+  }, { collection: "staff"});
 
 const staff = mongoose.model("Staff", staffSchema)
 
