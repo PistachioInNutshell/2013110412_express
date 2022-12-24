@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const staffSchema = new Schema({
+const shopSchema = new Schema({
     name:  {type: String, require: true, trim: true },
     photo: {type: String, default: 'nopic.png'},
     location: {
@@ -20,6 +20,6 @@ const staffSchema = new Schema({
         foreignField: 'shop'
       })
 
-const shop = mongoose.model("Shop", staffSchema)
+const shop = mongoose.model("Shop", shopSchema)
 
 module.exports = shop
