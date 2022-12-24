@@ -12,7 +12,7 @@ const staffSchema = new Schema({
     //updatedAt: {type: Date, default: Date.now },
   }, { 
     timestamps: true,
-    collection: "Shops"});
+    collection: "Shop"});
 
 const shop = mongoose.model("Shop", staffSchema)
 
