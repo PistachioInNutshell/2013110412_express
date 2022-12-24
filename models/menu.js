@@ -8,8 +8,13 @@ const menuSchema = new Schema({
     //createdAt: {type: Date, default: Date.now },
     //updatedAt: {type: Date, default: Date.now },
   }, { 
+    toJson:{ virtuals: true},
     timestamps: true,
     collection: "menus"});
+
+menuSchema.virtual('price_vat').get(function(){
+    return (this.price * 0.07) + this.price
+})
 
 const menu = mongoose.model("Menu", menuSchema)
 
