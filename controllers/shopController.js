@@ -42,7 +42,9 @@ exports.show = async (req, res, next) => {
       const shop = await Shop.findById(req.params.id).populate('menus');
 
       if(!shop){
-          throw new Error('ไม่พบร้านที่ค้นหา')
+          const error = new Error('ไม่พบร้านที่ค้นหา')
+          error.statusCode = 400
+          throw error
       }
       else{
           res.status(200).json({
@@ -51,10 +53,6 @@ exports.show = async (req, res, next) => {
       } 
 
   }catch (error){
-      res.status(400).json({
-          error:{
-              message: 'เกิดข้อผิดพลาด: ' + error.message
-          },
-      })
+      next(error)
   }
 }

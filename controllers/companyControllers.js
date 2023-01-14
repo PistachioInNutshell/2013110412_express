@@ -20,11 +20,16 @@ exports.show = async (req, res) => {
 
   try {
     const company = await Company.findById(req.params.id)
-    if (!company) throw new Error('ไม่พบข้อมูล')
+    if (!company) {
+      const error = new Error('ไม่พบข้อมูล')
+      error.statusCode = 404
+      throw error;
+    }
     res.send({ data: company })
   } 
   catch (error) {
-    res.status(404).json({ message: 'error : ' + error.message })
+    //res.status(404).json({ message: 'error : ' + error.message })
+    next(error)
   }
 }
 
@@ -35,10 +40,12 @@ exports.insert = async (req, res) => {
 
     const company = new Company({ name, address })
     await company.save()
+    
     res.status(201).json({ message: 'เพิ่มข้อมูลเรียบร้อย' })
   } 
   catch (error) {
-    res.status(404).json({ message: 'error : ' + error.message })
+    //res.status(404).json({ message: 'error : ' + error.message })
+    next(error)
   }
 }
 
@@ -48,11 +55,16 @@ exports.update = async (req, res) => {
     const { id } = req.params
     const { name, address } = req.body
     const company = await Company.updateOne({ _id: id }, { name, address })
-    if (company.matchedCount === 0) throw new Error('ไม่พบข้อมูล')
+    if (company.matchedCount === 0) {
+      const error = new Error('ไม่พบข้อมูล')
+      error.statusCode = 404
+      throw error;
+    }
     res.status(200).json({ message: 'แก้ไขข้อมูลเรียบร้อย' })
   } 
   catch (error) {
-    res.status(404).json({ message: 'error : ' + error.message })
+    //res.status(404).json({ message: 'error : ' + error.message })
+    next(error)
   }
 }
 
@@ -60,11 +72,16 @@ exports.destroy = async (req, res) => {
   try {
     const { id } = req.params
     const company = await Company.deleteOne({ _id: id })
-    if (company.deletedCount === 0) throw new Error('ไม่พบข้อมูล')
+    if (company.deletedCount === 0) {
+      const error = new Error('ไม่พบข้อมูล')
+      error.statusCode = 404
+      throw error;
+    }
     res.status(200).json({ message: 'ลบข้อมูลเรียบร้อย' })
   } 
   catch (error) {
-    res.status(404).json({ message: 'error : ' + error.message })
+    //res.status(404).json({ message: 'error : ' + error.message })
+    next(error)
   }
 }
 

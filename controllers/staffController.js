@@ -16,7 +16,9 @@ exports.show = async (req, res, next) => {
         });
 
         if(!staff){
-            throw new Error('ไม่พบผู้ใช้งาน')
+            const error = new Error('ไม่พบผู้ใช้งาน')
+            error.statusCode = 400
+            throw error;
         }
         else{
             res.status(200).json({
@@ -25,11 +27,7 @@ exports.show = async (req, res, next) => {
         } 
 
     }catch (error){
-        res.status(400).json({
-            error:{
-                message: 'เกิดข้อผิดพลาด: ' + error.message
-            },
-        })
+        next(error)
     }
 }
 
@@ -57,7 +55,9 @@ exports.destroy = async (req, res, next) => {
         });
         //console.log(staff)
         if(staff.deleteCount === 0){
-            throw new Error('ไม่สามารถลบข้อมูลผู้ใช้งานได้ / ไม่พบข้อมูลผู้ใช้งาน')
+            const error = new Error('ไม่สามารถลบข้อมูลผู้ใช้งานได้ / ไม่พบข้อมูลผู้ใช้งาน')
+            error.statusCode = 400
+            throw error;
         }else {
             return res.status(200).json({ 
                 message: 'ลบข้อมูลเรียบร้อยแล้ว',
@@ -65,11 +65,7 @@ exports.destroy = async (req, res, next) => {
         }
 
     }catch (error){
-        res.status(400).json({
-            error:{
-                message: 'เกิดข้อผิดพลาด: ' + error.message
-            },
-        })
+        next(error)
     }
 }
 
@@ -100,11 +96,7 @@ exports.update = async (req, res, next) => {
             message: 'แก้ไขข้อมูลเรียบร้อยแล้ว',
         });
     }catch (error){
-        res.status(400).json({
-            error:{
-                message: 'เกิดข้อผิดพลาด: ' + error.message
-            },
-        })
+        next(error)
     }
 };
   
