@@ -7,4 +7,6 @@ router.get('/', userControllers.index);
 
 router.get('/bio', userControllers.bio); 
 
+router.post('/', userControllers.register);
+
 module.exports = router;

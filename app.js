@@ -8,10 +8,12 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var companyRouter = require('./routes/company');
 var staffRouter = require('./routes/staff');
+var shopRouter = require('./routes/shop');
 
 var app = express();
 
 mongoose.connect('mongodb+srv://superdev:nan1460za555@2013110412-nun.jdwj8h4.mongodb.net/restfulapi?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false})
+//monogoose.connect(config.MONGODB_URI,{useNewUrlParser: true, useUnifiedTopology: true})
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -20,8 +22,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/user', usersRouter);
 app.use('/company', companyRouter)
 app.use('/staff', staffRouter);
+app.use('/shop', shopRouter);
 
 module.exports = app;
