@@ -1,5 +1,14 @@
 const Shop = require('../models/shop')
 const menu = require('../models/menu')
+const config = require('../config/index')
+
+const fs = require('fs');
+const path = require('path');
+const uuidv4 = require('uuid');
+const { promisify } = require('util')
+const writeFileAsync = promisify(fs.writeFile)
+
+const { validationResult } = require('express-validator');
 
 exports.index = async (req, res, next) => {
 
@@ -56,3 +65,29 @@ exports.show = async (req, res, next) => {
       next(error)
   }
 }
+
+exports.insert = async (req, res, next) =>{
+  try{
+    const { name,location, photo } = req.body;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      const error = new Error("received incorrect information!");
+      error.statusCode = 422;
+      error.validation = errors.array();
+      throw error;
+    }
+    let shop = new Shop({
+      name: name,
+      location: location,
+      photo: await saveImageToDisk(photo)
+    });
+
+    await shop.save();
+
+    res.status(200).json({
+      message: "Insert Shop Successfully",
+    });
+  }catch(err){
+    next(err)
+  }
+};
