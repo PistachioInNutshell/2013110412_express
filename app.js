@@ -3,6 +3,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const mongoose = require('mongoose');
+const config = require('./config/index');
+const passport = require('passport');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -10,21 +12,36 @@ var companyRouter = require('./routes/company');
 var staffRouter = require('./routes/staff');
 var shopRouter = require('./routes/shop');
 
+const errorHandler = require('./middleware/errorHandler');
+
 var app = express();
 
-mongoose.connect('mongodb+srv://superdev:nan1460za555@2013110412-nun.jdwj8h4.mongodb.net/restfulapi?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false})
-//monogoose.connect(config.MONGODB_URI,{useNewUrlParser: true, useUnifiedTopology: true})
+
+//mongoose.connect('mongodb+srv://superdev:nan1460za555@2013110412-nun.jdwj8h4.mongodb.net/restfulapi?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false})
+mongoose.connect(config.MONGODB_URI,{useNewUrlParser: true, useUnifiedTopology: true,useFindAndModify: false, useCreateIndex: true})
 
 app.use(logger('dev'));
-app.use(express.json());
+//app.use(express.json());
+app.use(express.json({
+    limit: '50mb'
+    
+  }));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(passport.initialize());
 
 app.use('/', indexRouter);
 app.use('/user', usersRouter);
 app.use('/company', companyRouter)
 app.use('/staff', staffRouter);
 app.use('/shop', shopRouter);
+
+app.get("*", function (req, res) {
+    res.send("404 not found!!!").status(404);
+  });
+
+app.use(errorHandler)
 
 module.exports = app;

@@ -4,7 +4,8 @@ module.exports = (err, req, res, next) => {
 
     res.status(statusCode).json({
         status_code: statusCode,
-        message: 'error : ' + err.messages
+        message: 'error : ' + err.messages,
+        validation: err.validation,
     })
     /*res.status(404).json({
         status_code: 404,
